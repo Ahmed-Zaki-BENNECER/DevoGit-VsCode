@@ -1,4 +1,6 @@
 import { useState } from "react";
+import "./App.css";
+import SearchResult from "./SearchResult";
 
 function App() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -9,6 +11,13 @@ function App() {
     "file4.txt",
     "file5.txt",
   ]);
+
+  const handleExtensionMessages = (event: { data: SearchResult; }) => {
+    const result = event.data;
+    console.log(result);
+  }
+
+  window.addEventListener("message", handleExtensionMessages);
 
   const handleSearch = () => {
     // If no search term provided, reset files to initial state
@@ -28,8 +37,6 @@ function App() {
     setFiles(filteredFiles);
   };
   const handleClick = (fileName: string) => {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     tsvscode.postMessage({
       type: "openFile",
       value: fileName,
@@ -45,20 +52,20 @@ function App() {
         onChange={(e) => setSearchTerm(e.target.value)}
       />
       <button onClick={handleSearch}>Search</button>
-      {files.map((file) => (
-        <ul key={file}>
-          <li>
+      <ul>
+        {files.map((file) => (
+          <li key={file}>
             <a
               href="#"
               onClick={() =>
-                handleClick("/home/jpeg/Documents/DevoGit/all_files.txt")
+                handleClick(file)
               }
             >
               {file}
             </a>
           </li>
-        </ul>
-      ))}
+        ))}
+      </ul>
     </div>
   );
 }

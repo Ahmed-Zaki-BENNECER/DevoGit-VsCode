@@ -1,3 +1,6 @@
+npm run compile && code --disable-extensions --extensionDevelopmentPath="%cd%"
+set path=%path%;C:\Users\j.lemoine\.node
+
 # helloworld README
 
 This is the README for your extension "helloworld". After writing up a brief description, we recommend including the following sections.

@@ -1,5 +1,6 @@
 import * as vscode from "vscode";
 import { getNonce } from "./getNonce";
+import { join } from "path";
 
 export class SidebarProvider implements vscode.WebviewViewProvider {
   _view?: vscode.WebviewView;
@@ -22,14 +23,21 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
     webviewView.webview.onDidReceiveMessage(async (data) => {
       switch (data.type) {
         case "openFile": {
-          const text = data.value;
-          console.log(text);
-
+          const fileName = data.value;
+          console.log(`Opening file: ${fileName}`);
+          
+          if (!vscode.workspace.workspaceFolders) {
+            vscode.window.showErrorMessage("You have no open folder in your workspace.");
+            return;
+          }
           // Convert file path to a vscode.Uri
-          const fileUri = vscode.Uri.file(text);
+          const fileUri = vscode.Uri.file(join(vscode.workspace.workspaceFolders[0].uri.path, fileName));
+
           // Open the file
           const document = await vscode.workspace.openTextDocument(fileUri);
           vscode.window.showTextDocument(document);
+
+          webviewView.webview.postMessage({docs: ["test1", "test2"]});
 
           break;
         }
@@ -85,13 +93,14 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
           --input-padding-horizontal: 6px;
           --input-margin-vertical: 4px;
           --input-margin-horizontal: 0;
+          --max-width: 300px;
         }
 
         button {
           border: none;
           padding: var(--input-padding-vertical) var(--input-padding-horizontal);
           margin: 8px 0px;
-          width: 103%;
+          width: min(100%, var(--max-width));
           text-align: center;
           outline: 1px solid transparent;
           outline-offset: 2px !important;
@@ -120,7 +129,7 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
         input:not([type="checkbox"]),
         textarea {
           display: block;
-          width: 100%;
+          width: calc(min(100%, var(--max-width)) - var(--input-padding-horizontal) * 2);
           border: none;
           font-family: var(--vscode-font-family);
           padding: var(--input-padding-vertical) var(--input-padding-horizontal);
@@ -134,7 +143,7 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
         </script>
 			</head>
       <body>
-        <h1>Hello Devoteamers</h1>
+        <h1>DevoGit Search</h1>
         <div id="root"></div>
 				<script nonce="${nonce}" src="${scriptUri}"></script>
 			</body>

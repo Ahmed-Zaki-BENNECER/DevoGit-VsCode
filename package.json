@@ -1,6 +1,6 @@
 {
-  "name": "helloworld",
-  "displayName": "HelloWorld",
+  "name": "devogit",
+  "displayName": "DevoGit",
   "description": "",
   "version": "0.0.1",
   "engines": {
@@ -10,9 +10,7 @@
     "Other"
   ],
   "activationEvents": [
-    "helloworld.helloWorld",
-    "helloworld.showTime",
-    "helloworld.refresh"
+    "devogit.devtools"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -36,20 +34,7 @@
         }
       ]
     },
-    "commands": [
-      {
-        "command": "helloworld.helloWorld",
-        "title": "Hello World"
-      },
-      {
-        "command": "helloworld.showTime",
-        "title": "Display current time"
-      },
-      {
-        "command": "helloworld.refresh",
-        "title": "Refresh"
-      }
-    ]
+    "commands": []
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
