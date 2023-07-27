@@ -1,8 +1,13 @@
 import * as fs from "fs";
 import { join } from "path";
 import SearchResult from "./SearchResult";
-import { workspace } from "vscode";
+import settings from "./Settings";
 
+/* -------------------------------------------------------------------------- */
+/*              Here we choose which words we want to search for.             */
+/*        We split the query in words, and we add plurals and singulars       */
+/*                     to the list of words to search for.                    */
+/* -------------------------------------------------------------------------- */
 function splitInWords(query: string) {
     return query
         .toLowerCase()
@@ -52,6 +57,10 @@ function getSubpathes(path: string) {
     return res;
 }
 
+/* -------------------------------------------------------------------------- */
+/*                       This is the important function                       */
+/*                    We compute the score of a leaf folder                   */
+/* -------------------------------------------------------------------------- */
 function computeScore(path: string, words: string[]) {
     let score = 0;
     for (const file of getFeuilleFiles(path)) {
@@ -90,11 +99,14 @@ function parcourir(rootPath: string, path: string, words: string[]) {
     return res;
 }
 
+/* -------------------------------------------------------------------------- */
+/*      The exported function doing the search and returning what we want     */
+/* -------------------------------------------------------------------------- */
 export default function search(rootPath: string, query: string) {
     const words = splitInWords(query);
     return parcourir(rootPath, rootPath, words)
         .sort((a, b) => b.score - a.score)
-        .slice(0, MAX_RESULTS)
+        .slice(0, settings.maxSearchResults)
         .map(({ path }) => {
             // we remove the score, and search for files within the path to match SearchResult type
             const files = getFeuilleFiles(join(rootPath, path));
@@ -109,12 +121,3 @@ export default function search(rootPath: string, query: string) {
             };
         }) as SearchResult;
 }
-
-var MAX_RESULTS = workspace.getConfiguration("devoteam.devogit").get("maxSearchResults") as number;
-
-workspace.onDidChangeConfiguration(event => {
-    let affected = event.affectsConfiguration("devoteam.devogit.maxSearchResults");
-    if (affected) {
-        MAX_RESULTS = workspace.getConfiguration("devoteam.devogit").get("maxSearchResults") as number;
-    }
-});

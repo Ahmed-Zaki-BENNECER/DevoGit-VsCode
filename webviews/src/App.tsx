@@ -7,20 +7,13 @@ function join(arg1: string, arg2: string) {
 
 function App() {
     const [searchTerm, setSearchTerm] = useState("");
-    const [files, setFiles] = useState<SearchResult>([
-        {
-            folderName: "test/test",
-            fileNames: ["file1.txt", "file2.txt"],
-        },
-        {
-            folderName: "test/test2",
-            fileNames: ["file3.txt", "file1.txt"],
-        },
-    ]);
+    const [files, setFiles] = useState<SearchResult>([]);
+    const [searching, setSearching] = useState(false);
 
-    const handleExtensionMessages = useCallback((event: { data: { type: "search"; searchResult: SearchResult } }) => {
+    const handleExtensionMessages = useCallback((event: { data: { type: string; searchResult: SearchResult } }) => {
         if (event.data.type === "search") {
             setFiles(event.data.searchResult);
+            setSearching(false);
         } else {
             console.log("Unknown message type: " + event.data.type);
         }
@@ -31,10 +24,14 @@ function App() {
         return () => window.removeEventListener("message", handleExtensionMessages);
     }, [handleExtensionMessages]);
 
-    const handleSearch = () => {
+    const handleSearch = useCallback(() => {
         // If no search term provided, reset files to initial state
         if (!searchTerm) {
             setFiles([]);
+            return;
+        }
+
+        if (searching) {
             return;
         }
 
@@ -42,13 +39,15 @@ function App() {
             type: "search",
             value: searchTerm,
         });
-    };
-    const handleClick = (fileName: string) => {
+        setSearching(true);
+    }, [searchTerm, searching]);
+
+    const handleClick = useCallback((path: string) => {
         tsvscode.postMessage({
             type: "openFile",
-            value: fileName,
+            value: path,
         });
-    };
+    }, []);
 
     return (
         <>
@@ -59,8 +58,20 @@ function App() {
                     placeholder='Search in files'
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
+                    onKeyDown={({ key }) => {
+                        if (key === "Enter") {
+                            handleSearch();
+                        }
+                    }}
+                    
                 />
-                <button onClick={handleSearch}>Search</button>
+                <button onClick={handleSearch} style={{
+                    // disabled attribute doesn't work here.
+                    cursor: searching ? "not-allowed" : "pointer",
+                    opacity: searching ? 0.5 : 1,
+                }}>
+                    Search
+                </button>
                 <div
                     className='results-container'
                     style={{
