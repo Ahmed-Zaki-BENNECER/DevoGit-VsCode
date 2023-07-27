@@ -1,7 +1,12 @@
 {
   "name": "devogit",
+  "publisher": "devoteam",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Ahmed-Zaki-BENNECER/DevoGit-VsCode"
+  },
   "displayName": "DevoGit",
-  "description": "",
+  "description": "This extension allows you to browse the Devoteam GitLab repository.",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.80.0"
@@ -34,7 +39,33 @@
         }
       ]
     },
-    "commands": []
+    "configuration": {
+      "title": "DevoGit",
+      "properties": {
+        "devoteam.devogit.maxSearchResults": {
+          "type": "number",
+          "default": 10,
+          "description": "Maximum number of displayed search results."
+        }
+      }
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "devogit.openSettings",
+          "group": "navigation",
+          "when": "view == devogit-sidebar-view"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "devogit.openSettings",
+        "title": "Open Extension Settings",
+        "icon": "$(settings-gear)",
+        "category": "DevoGit"
+      }
+    ]
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
@@ -58,5 +89,8 @@
     "mocha": "^10.2.0",
     "sinon": "^15.2.0",
     "typescript": "^5.1.3"
+  },
+  "dependencies": {
+    "fs": "^0.0.1-security"
   }
 }

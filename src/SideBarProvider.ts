@@ -1,6 +1,8 @@
 import * as vscode from "vscode";
 import { getNonce } from "./getNonce";
 import { join } from "path";
+import SearchResult from "./SearchResult";
+import search from "./search";
 
 export class SidebarProvider implements vscode.WebviewViewProvider {
   _view?: vscode.WebviewView;
@@ -37,22 +39,16 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
           const document = await vscode.workspace.openTextDocument(fileUri);
           vscode.window.showTextDocument(document);
 
-          webviewView.webview.postMessage({docs: ["test1", "test2"]});
-
           break;
         }
-        case "onInfo": {
-          if (!data.value) {
+        case "search": {
+          if (!vscode.workspace.workspaceFolders) {
+            vscode.window.showErrorMessage("You have no open folder in your workspace.");
             return;
           }
-          vscode.window.showInformationMessage(data.value);
-          break;
-        }
-        case "onError": {
-          if (!data.value) {
-            return;
-          }
-          vscode.window.showErrorMessage(data.value);
+          const query = data.value;
+          const searchResult = search(vscode.Uri.file(vscode.workspace.workspaceFolders[0].uri.path).fsPath, query);
+          webviewView.webview.postMessage({type: "search", searchResult});
           break;
         }
       }
@@ -143,7 +139,6 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
         </script>
 			</head>
       <body>
-        <h1>DevoGit Search</h1>
         <div id="root"></div>
 				<script nonce="${nonce}" src="${scriptUri}"></script>
 			</body>
