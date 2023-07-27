@@ -54,7 +54,7 @@
         {
           "command": "devogit.openSettings",
           "group": "navigation",
-          "when": "view == devogit-sidebar-view"
+          "when": "devogit.webviewVisible"
         }
       ]
     },

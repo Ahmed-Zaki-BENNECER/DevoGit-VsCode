@@ -1,7 +1,6 @@
 import * as vscode from "vscode";
 import { getNonce } from "./getNonce";
 import { join } from "path";
-import SearchResult from "./SearchResult";
 import search from "./search";
 
 export class SidebarProvider implements vscode.WebviewViewProvider {
@@ -12,6 +11,7 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
 
   public resolveWebviewView(webviewView: vscode.WebviewView) {
     this._view = webviewView;
+    vscode.commands.executeCommand("setContext", "devogit.webviewVisible", webviewView.visible);
 
     webviewView.webview.options = {
       // Allow scripts in the webview
@@ -21,6 +21,10 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
     };
 
     webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
+
+    webviewView.onDidChangeVisibility(() => {
+      vscode.commands.executeCommand("setContext", "devogit.webviewVisible", webviewView.visible);
+    });
 
     webviewView.webview.onDidReceiveMessage(async (data) => {
       switch (data.type) {
