@@ -57,6 +57,12 @@ Run in workspace's root the command:
 npm install && cd webviews && npm install && npm run build
 ```
 
+> If you are on a masterized computer or you are not admin of your computer, you may need to run ONCE the command:
+> ```shell
+> setx PATH "%path%;<path-to-node-folder>"
+> ```
+> \(replacing \<path-to-node-folder> with your path to node and npm\) if the upper command says "'npm' is not recognized as an inernal or external command". You will then need to restart completely VSCode and the terminal inside VSCode.
+
 Now, whereever you are in the project, press F5 to launch the extension in debug mode. It will start a new VSCode window with the extension loaded and all the others disabled.
 
 ## Good to know
