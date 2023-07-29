@@ -69,4 +69,4 @@ Now, whereever you are in the project, press F5 to launch the extension in debug
 
 When you are in debug mode, you can edit the code and press Ctrl+R in the debug window to reload the extension.
 
-If you edit the code in the webviews folder only, you don't need to reload the extension, just go in the debug window and close and open the DevoGit tab to see the changes.
+If you edit the code in the webviews folder only, you don't need to reload the extension, just go in the debug window and use the "Reload webviews" command from Command Palette.

@@ -46,6 +46,11 @@
           "type": "number",
           "default": 10,
           "description": "Maximum number of displayed search results."
+        },
+        "devoteam.devogit.keepContentWhenHidden": {
+          "type": "boolean",
+          "default": true,
+          "description": "Keep the search content when the sidebar is collapsed."
         }
       }
     },

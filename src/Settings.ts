@@ -1,15 +1,28 @@
-import { workspace } from "vscode";
+import { workspace, window, commands } from "vscode";
+
+type Options = {
+    needReload?: boolean;
+};
 
 class Setting<T> {
     value: T;
 
-    constructor(variablePath: string) {
+    constructor(variablePath: string, options: Options = {}) {
         this.value = workspace.getConfiguration("devoteam.devogit").get(variablePath) as T;
 
         workspace.onDidChangeConfiguration((event) => {
             let affected = event.affectsConfiguration("devoteam.devogit." + variablePath);
             if (affected) {
                 this.value = workspace.getConfiguration("devoteam.devogit").get(variablePath) as T;
+            }
+            if (affected && options.needReload) {
+                window
+                    .showInformationMessage("You need to reload the window to apply the changes.", "Reload")
+                    .then((choice) => {
+                        if (choice === "Reload") {
+                            commands.executeCommand("workbench.action.reloadWindow");
+                        }
+                    });
             }
         });
     }
@@ -31,6 +44,11 @@ class SettingsClass {
     private _maxSearchResults = new Setting<number>("maxSearchResults");
     get maxSearchResults() {
         return SettingsClass.instance._maxSearchResults.value;
+    }
+
+    private _keepContentWhenHidden = new Setting<boolean>("keepContentWhenHidden", { needReload: true });
+    get keepContentWhenHidden() {
+        return SettingsClass.instance._keepContentWhenHidden.value;
     }
 }
 

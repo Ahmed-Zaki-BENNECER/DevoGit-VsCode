@@ -1,5 +1,6 @@
 import * as vscode from "vscode";
 import { SidebarProvider } from "./SideBarProvider";
+import settings from "./Settings";
 
 export function activate(context: vscode.ExtensionContext) {
     const sidebarProvider = new SidebarProvider(context.extensionUri);
@@ -7,7 +8,7 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(
         vscode.window.registerWebviewViewProvider("devogit-sidebar", sidebarProvider, {
             webviewOptions: {
-                retainContextWhenHidden: true,
+                retainContextWhenHidden: settings.keepContentWhenHidden,
             },
         })
     );
