@@ -117,10 +117,11 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
                     input:not([type="checkbox"]),
                     textarea {
                         display: block;
-                        width: calc(min(100%, var(--max-width)) - var(--input-padding-horizontal) * 2);
+                        width: calc(min(100%, var(--max-width)) - var(--input-padding-horizontal) - var(--search-input-padding-right));
                         border: none;
                         font-family: var(--vscode-font-family);
                         padding: var(--input-padding-vertical) var(--input-padding-horizontal);
+                        padding-right: var(--search-input-padding-right);
                         color: var(--vscode-input-foreground);
                         outline-color: var(--vscode-input-border);
                         background-color: var(--vscode-input-background);

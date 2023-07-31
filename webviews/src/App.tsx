@@ -1,9 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import SearchResult from "./SearchResult";
-
-function join(arg1: string, arg2: string) {
-    return (arg1 + "/" + arg2).replace(/\/+/g, "/");
-}
+import ClearInput from "./components/ClearInput";
+import { join } from "path";
 
 function App() {
     const [searchTerm, setSearchTerm] = useState("");
@@ -53,23 +51,27 @@ function App() {
         <>
             <h1>DevoGit Search</h1>
             <div>
-                <input
-                    type='text'
-                    placeholder='Search in files'
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    onKeyDown={({ key }) => {
-                        if (key === "Enter") {
-                            handleSearch();
-                        }
-                    }}
-                    
-                />
-                <button onClick={handleSearch} style={{
-                    // disabled attribute doesn't work here.
-                    cursor: searching ? "not-allowed" : "pointer",
-                    opacity: searching ? 0.5 : 1,
-                }}>
+                <div style={{ position: "relative" }}>
+                    <input
+                        type='text'
+                        placeholder='Search in files'
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        onKeyDown={({ key }) => {
+                            if (key === "Enter") {
+                                handleSearch();
+                            }
+                        }}
+                    />
+                    <ClearInput onClick={() => setSearchTerm("")} displayed={searchTerm !== ""}/>
+                </div>
+                <button
+                    onClick={handleSearch}
+                    style={{
+                        // disabled attribute doesn't work here.
+                        cursor: searching ? "not-allowed" : "pointer",
+                        opacity: searching ? 0.5 : 1,
+                    }}>
                     Search
                 </button>
                 <div
