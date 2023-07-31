@@ -63,7 +63,13 @@ function App() {
                             }
                         }}
                     />
-                    <ClearInput onClick={() => setSearchTerm("")} displayed={searchTerm !== ""}/>
+                    <ClearInput
+                        onClick={() => {
+                            setSearchTerm("");
+                            setFiles([]);
+                        }}
+                        displayed={searchTerm !== ""}
+                    />
                 </div>
                 <button
                     onClick={handleSearch}
