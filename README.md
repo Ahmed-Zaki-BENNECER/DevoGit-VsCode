@@ -65,6 +65,15 @@ npm install && cd webviews && npm install && npm run build
 
 Now, whereever you are in the project, press F5 to launch the extension in debug mode. It will start a new VSCode window with the extension loaded and all the others disabled.
 
+## Deploy the extension
+
+Run in **workspace's root** the command:
+```shell
+npm run package
+```
+
+It will create a file called "devogit-<version>.vsix" in the workspace's root.
+
 ## Good to know
 
 When you are in debug mode, you can edit the code and press Ctrl+R in the debug window to reload the extension.
