@@ -1,6 +1,7 @@
 # Purpose
 
 This extension is used to search through the Devoteam GitLab project.
+<img width="818" alt="Screenshot 2025-02-09 at 10 38 38" src="https://github.com/user-attachments/assets/a9c550e8-2df5-46d3-92e7-0b1bf8c2487f" />
 
 # Install and use
 
